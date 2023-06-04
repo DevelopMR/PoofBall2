@@ -4,8 +4,8 @@ class Brain {
         this.nodes = [];
         this.inputs = inputs;
         this.outputs = outputs;
-        this.layers = 2;
-        //this.midlayerNodes = 4;
+        this.layers = 3;
+        this.midlayerNodes = 4;
         //this.midTwoLayerNodes = 9;
         this.nextNode = 0;
         this.network = []; //a list of the this.nodes in the order that they need to be considered in the NN
@@ -23,24 +23,25 @@ class Brain {
             this.nodes[i].layer = 0;
         }
 
-        /* // midlayer
+        // midlayer
         for (var i = 0; i < this.midlayerNodes; i++) {
             this.nodes.push(new Node(i + this.inputs));
             this.nodes[i + this.inputs].layer = 1;
             this.nextNode++;
-        } */
+        }
 
         //create output this.nodes
-        /*         for (var i = 0; i < this.outputs; i++) {
-                    this.nodes.push(new Node(i + this.inputs + this.midlayerNodes));
-                    this.nodes[i + this.inputs + this.midlayerNodes].layer = 2;
-                    this.nextNode++;
-                } */
         for (var i = 0; i < this.outputs; i++) {
-            this.nodes.push(new Node(i + this.inputs));
-            this.nodes[i + this.inputs].layer = 1;
+            this.nodes.push(new Node(i + this.inputs + this.midlayerNodes));
+            this.nodes[i + this.inputs + this.midlayerNodes].layer = 2;
             this.nextNode++;
         }
+
+        /* for (var i = 0; i < this.outputs; i++) {
+            this.nodes.push(new Node(i + this.inputs));
+            this.nodes[i + this.inputs].layer = 2;
+            this.nextNode++;
+        } */
 
 
         //bias node
@@ -70,9 +71,9 @@ class Brain {
                   }
               } */
         var l1Start = this.inputs;
-        var l1End = l1Start + this.outputs;
+        var l1End = l1Start + this.midlayerNodes;
         for (var i = 0; i < this.inputs; i++) {
-            for (var j = 0; j < this.outputs; j++) {
+            for (var j = 0; j < this.midlayerNodes; j++) {
 
                 //get the innovation number of the connection
                 //this will be a new number if no identical genome has mutated in the same way
@@ -82,28 +83,29 @@ class Brain {
         }
 
         // bias node => layer1
-        /*         for (var j = 0; j < this.midlayerNodes; j++) {
-        
-                    var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[this.biasNode], this.nodes[j + l1Start]);
-                    this.genes.push(new connectionGene(this.nodes[this.biasNode], this.nodes[j + l1Start], 1, connectionInnovationNumber));
-                } */
-        for (var j = 0; j < this.outputs; j++) {
+
+        for (var j = 0; j < this.midlayerNodes; j++) {
 
             var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[this.biasNode], this.nodes[j + l1Start]);
             this.genes.push(new connectionGene(this.nodes[this.biasNode], this.nodes[j + l1Start], 1, connectionInnovationNumber));
         }
+        /* for (var j = 0; j < this.outputs; j++) {
+
+            var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[this.biasNode], this.nodes[j + l1Start]);
+            this.genes.push(new connectionGene(this.nodes[this.biasNode], this.nodes[j + l1Start], 1, connectionInnovationNumber));
+        } */
 
 
         // layer1 => output
-        /*         var l3Start = l1End;
-        
-                for (var i = 0; i < this.midlayerNodes; i++) {
-                    for (var j = 0; j < this.outputs; j++) {
-        
-                        var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[i + l1Start], this.nodes[j + l3Start]);
-                        this.genes.push(new connectionGene(this.nodes[i + l1Start], this.nodes[j + l3Start], random(-1, 1), connectionInnovationNumber));
-                    }
-                } */
+        var l2Start = l1End;
+
+        for (var i = 0; i < this.midlayerNodes; i++) {
+            for (var j = 0; j < this.outputs; j++) {
+
+                var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[i + l1Start], this.nodes[j + l2Start]);
+                this.genes.push(new connectionGene(this.nodes[i + l1Start], this.nodes[j + l2Start], random(-1, 1), connectionInnovationNumber));
+            }
+        }
 
 
         this.connectNodes();

@@ -3,7 +3,7 @@ class Bubble {
         this.parent = parent;
         this.weight = 10 + Math.random() * 10;
         this.x = 30 + (canvas.width - 30) * Math.random();
-        this.y = 30 + 60 * Math.random();
+        this.y = 30 + 240 * Math.random();
 
         this.gravity = .005; // ??
 
@@ -15,6 +15,9 @@ class Bubble {
 
         this.width = 30;
         this.radius = this.width / 2;
+
+        this.bumpCount = 0;
+        this.bumpMax = 8; // maximum number of puffs a bubble can withstand
     }
 
 
@@ -32,8 +35,18 @@ class Bubble {
         //pop();
     }
 
-    // do they need to move?
-    // lots of cycle wasted if we are testing for AI
+
+    bump(xBump, yBump) {
+        this.xVel -= xBump;
+        this.yVel -= yBump;
+
+        this.bumpCount++;
+        if (this.bumpCount >= this.bumpMax) {
+            this.parent.dead = true;
+        }
+    }
+
+
     update() {
 
 
@@ -56,9 +69,18 @@ class Bubble {
         this.x += this.xVel;
         this.y += this.yVel;
 
-        // border rollover ? **or bounce?**  MOVE to collision
-        if ((this.x > canvas.width) || (this.x < 0)) { this.parent.dead = true }
-        //if (this.x < 0) { this.parent.dead = true }
+        // border 
+        if ((this.x > canvas.width) || (this.x < 0)) {
+
+
+            if ((this.y > 200) && (this.y < 400)) {
+                // side score!
+                this.parent.thruGoal();
+            }
+            else {
+                this.parent.dead = true
+            }
+        }
 
         if (this.y > canvas.height) { this.parent.dead = true }
 

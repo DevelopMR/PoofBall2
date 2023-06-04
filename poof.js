@@ -14,15 +14,21 @@ class Poof {
         this.sizeMod;
         this.halfSizeMod;
         this.hit = false;
+        this.color = this.parent.color;
     }
 
 
     show() {
         colorMode(HSB, 100);
+
+        stroke(color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 35));
+        fill(color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 5));
+
         var scaleMod = 1 + this.ModScaler * (canvas.height - this.y);
         this.sizeMod = this.size * scaleMod;
         this.halfSizeMod = this.sizeMod / 2;
         //rect(this.x - this.halfSizeMod, this.y - this.halfSizeMod, this.sizeMod, this.halfSizeMod);
+
         arc(this.x, this.y, this.sizeMod, this.sizeMod, this.arcStart, this.arcEnd, OPEN);
 
         // fill('blue');
@@ -47,7 +53,7 @@ class Poof {
                 if (!this.hit) {
                     this.boost();
                     this.hit = true;
-                    this.parent.score += 50;
+                    this.parent.score += 100;
                 }
             }
         }
@@ -61,12 +67,8 @@ class Poof {
         var xThrust = this.power * Math.cos(ang) * 2;
         var yThrust = this.power * Math.sin(ang);
 
-        //console.log("xThrust" + xThrust);
-        //console.log("yThrust" + yThrust);
-
         // add component thrusts to bubble
-        this.parent.bubble.xVel -= xThrust;
-        this.parent.bubble.yVel -= yThrust;
+        this.parent.bubble.bump(xThrust, yThrust);
 
     }
 

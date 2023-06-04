@@ -48,6 +48,7 @@ class Population {
         }
 
         this.players[bestInd].isBest = true;
+        this.bestPlayer = this.players[bestInd];
         return this.players[bestInd];
 
     }

@@ -11,6 +11,7 @@ class Spout {
         this.maxVel = 2 + 2 * Math.random();
         this.size = 30;
         this.halfSize = this.size / 2;
+        this.doubleSize = this.size * 2;
         this.direction = 0; // randomise?
         this.visionRange = 125 + 50 * Math.random();
 
@@ -19,10 +20,14 @@ class Spout {
         this.isBest = false;
 
         this.color = this.StartColor();
+        this.hullColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color) / 3), 100);
+        this.fieldColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 50);
 
         this.bubble = new Bubble(this);
         this.livePoof = false;
         this.poof;
+        this.justPoofed = 0; // counter for visualising poofing action
+        this.poofVisualLimit = 10; // number of game cycles
 
         // genome PROJECT SPECIFIC
         // Vision values
@@ -66,29 +71,29 @@ class Spout {
 
     show() {
 
-
-        // first show the bug's puddle
+        // first show the spout's bubble
         this.bubble.show();
+
 
         colorMode(HSB, 100);
 
-        // show bug ** UPDATE TO BUG SHAPE **
+        // show pebble
         push();
         translate(this.x, this.y);
-        // rotate(this.rot);
-        stroke(this.color);
-        var hullColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color) / 3), 100);
-        var fieldColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 50);
-        fill(fieldColor);
-        strokeWeight(1);
-        ellipse(0, 0, this.size, this.size);
-        fill(hullColor);
 
-        // DRAW VISION
+        stroke(this.color);
+
+        fill(this.fieldColor);
+        strokeWeight(1);
+
+        if ((this.livePoof) && (this.justPoofed < this.poofVisualLimit)) {
+            ellipse(0, 0, this.halfSize, this.doubleSize);
+        }
+        else {
+            ellipse(0, 0, this.size, this.size);
+        }
+
         colorMode(RGB, 255);
-        /*         noFill();
-                stroke(255, 0, 0);
-                ellipse(0, 0, 2 * this.visionRange, 2 * this.visionRange); */
 
         pop();
 
@@ -120,12 +125,13 @@ class Spout {
         if (!this.livePoof) {
             this.poof = new Poof(this);
             this.livePoof = true;
+            this.justPoofed = 0;
         }
     }
 
     thruGoal() {
 
-        this.score += 1000;
+        this.score += 500;
         //delete this.poof;
         this.bubble = new Bubble(this);
     }
@@ -144,6 +150,7 @@ class Spout {
 
         if (this.livePoof) {
             this.poof.update();
+            this.justPoofed++; // determines pebble shape
         }
 
         this.score += .01; // win just by living
@@ -177,7 +184,7 @@ class Spout {
         // DO FOR ALL INPUTS
         this.vision[0] = map(this.x, 0, 1000, 0, 1); // player x-pos 
         this.vision[1] = map(this.bubble.x - this.x, -1000, 1000, -1, 1); // bubble x-delta
-        this.vision[2] = map(this.bubble.y, 0, 800, 0, 1); // bubble x-pos
+        this.vision[2] = map(this.bubble.y, 0, 800, 0, 1); // bubble y-pos
 
     }
 
@@ -192,6 +199,7 @@ class Spout {
 
         const velChangeFactor = .5;
         const thoughtSensitivity = .75;
+        const puffThoughtSensitivity = .85;
 
         if (this.decision[0] > thoughtSensitivity) {
             this.left();
@@ -199,7 +207,7 @@ class Spout {
         if (this.decision[1] > thoughtSensitivity) {
             this.right();
         }
-        if (this.decision[2] > thoughtSensitivity) {
+        if (this.decision[2] > puffThoughtSensitivity) {
             this.puff();
         }
 
