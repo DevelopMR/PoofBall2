@@ -86,7 +86,7 @@ function drawToScreen() {
         //rect(0, 0, 1000, 800);
         fill(140, 180, 210);
         rect(400, 0, 200, 2); // top goal
-        fill(50, 80, 90);
+        fill(40, 70, 80);
         rect(998, 200, 2, 200); // side goal
     }
 }
