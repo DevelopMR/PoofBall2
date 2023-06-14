@@ -88,7 +88,7 @@ class Species {
     //sorts the species by fitness
     sortSpecies() {
 
-        var temp = []; // new ArrayList < Player > ();
+        var temp = [];
 
         //selection short
         for (var i = 0; i < this.players.length; i++) {

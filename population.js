@@ -1,14 +1,14 @@
 class Population {
 
     constructor(size) {
-        this.players = []; //new ArrayList<Player>();
+        this.players = [];
         this.bestPlayer; //the best ever player
         this.bestScore = 0; //the score of the best ever player
         this.globalBestScore = 0;
         this.gen = 1;
-        this.innovationHistory = []; // new ArrayList<connectionHistory>();
-        this.genPlayers = []; //new ArrayList<Player>();
-        this.species = []; //new ArrayList<Species>();
+        this.innovationHistory = [];
+        this.genPlayers = [];
+        this.species = [];
 
         this.remaining = size;
         this.massExtinctionEvent = false;
@@ -19,10 +19,10 @@ class Population {
         for (var i = 0; i < size; i++) {
 
             this.players.push(new Spout());
-            //this.players[this.players.length - 1].brain.fullyConnect(this.innovationHistory);
+
             this.players[this.players.length - 1].brain.multiLayerPrime(this.innovationHistory);
 
-            this.players[this.players.length - 1].brain.mutate(this.innovationHistory); //fullyConnect(this.innovationHistory);
+            this.players[this.players.length - 1].brain.mutate(this.innovationHistory);
             this.players[this.players.length - 1].brain.generateNetwork();
 
         }
@@ -56,20 +56,20 @@ class Population {
         var remaining = 0;
         var firstShown = false;
         for (var i = 0; i < this.players.length; i++) {
-            //for (var i = this.players.length; i > 0; i--) {  // try this backwards to put best bird on top
+
             if (!this.players[i].dead) {
 
                 remaining++;
 
-                for (var j = 0; j < superSpeed; j++) {
-                    this.players[i].look(); //get inputs for brain
-                    this.players[i].think(); //use outputs from neural network
-                    this.players[i].update(); //move the player according to the outputs from the neural network
-                }
-                if (!showNothing && (!showBest || !firstShown)) {
-                    this.players[i].show();
-                    firstShown = true;
-                }
+
+                this.players[i].look();
+                this.players[i].think();
+                this.players[i].update();
+
+
+                this.players[i].show();
+                firstShown = true;
+
                 if (this.players[i].score > this.globalBestScore) {
                     this.globalBestScore = this.players[i].score;
                 }
@@ -80,13 +80,9 @@ class Population {
 
         }
 
-        // puts the Best on top
-        if (!this.players[0].dead) {
-            this.players[0].show();
-        }
-
     }
-    //------------------------------------------------------------------------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------------------
     //returns true if all the players are dead      sad
     done() {
         for (var i = 0; i < this.players.length; i++) {
@@ -96,7 +92,8 @@ class Population {
         }
         return true;
     }
-    //------------------------------------------------------------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------
     //sets the best player globally and for thisthis.gen
     setBestPlayer() {
         var tempBest = this.species[0].players[0];
@@ -114,7 +111,7 @@ class Population {
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------
     //this function is called when all the players in the this.players are dead and a newthis.generation needs to be made
     naturalSelection() {
 

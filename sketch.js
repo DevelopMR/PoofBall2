@@ -25,6 +25,12 @@ function preload() {
     // load background images, etc.
     backgroundSprite = loadImage("images/background_faded_stains_ized.jpg");
     // spaceFont = loadFont("fonts/PressStart2P-Regular.ttf");
+
+    /* // sounds
+    soundFormats('wav');
+    woosh = loadSound('assets/167929__speedenza__whoosh-puff.wav');
+    poplaunch = loadSound('assets/545200__theplax__pop-2.wav');
+    poplaunch.playMode('sustain'); */
 }
 
 function setup() {
@@ -84,10 +90,12 @@ function drawToScreen() {
         colorMode(RGB, 255);
         //fill(230, 240, 255);
         //rect(0, 0, 1000, 800);
-        fill(140, 180, 210);
-        rect(400, 0, 200, 2); // top goal
-        fill(40, 70, 80);
-        rect(998, 200, 2, 200); // side goal
+        noStroke();
+        fill(140, 180, 210, 255);
+        rect(400, 0, 200, 3); // top goal
+        fill(180, 220, 250, 255);
+        rect(997, 200, 3, 200); // side goal1
+        rect(0, 200, 3, 200); // side goal2
     }
 }
 

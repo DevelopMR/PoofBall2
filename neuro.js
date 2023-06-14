@@ -5,7 +5,7 @@ class Brain {
         this.inputs = inputs;
         this.outputs = outputs;
         this.layers = 3;
-        this.midlayerNodes = 4;
+        this.midlayerNodes = 5;
         //this.midTwoLayerNodes = 9;
         this.nextNode = 0;
         this.network = []; //a list of the this.nodes in the order that they need to be considered in the NN
@@ -166,29 +166,31 @@ class Brain {
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //feeding in input values varo the NN and returning output array
     feedForward(inputValues) {
-        //set the outputs of the input this.nodes
+        //set the input values
         for (var i = 0; i < this.inputs; i++) {
             this.nodes[i].outputValue = inputValues[i];
         }
         this.nodes[this.biasNode].outputValue = 1; //output of bias is 1
 
-        for (var i = 0; i < this.network.length; i++) { //for each node in the network engage it(see node class for what this does)
+        // trigger each node
+        for (var i = 0; i < this.network.length; i++) {
             this.network[i].engage();
         }
 
-        //the outputs are this.nodes[inputs] to this.nodes [inputs+outputs-1]
+
         var outs = [];
 
-        var outStart = this.startNodesCount - this.outputs;
+        var outStart = this.startNodesCount - this.outputs; // count backwards from the end to find index
 
         /*     for (var i = 0; i < this.outputs; i++) {
               outs[i] = this.nodes[this.inputs + i].outputValue;
             } */
 
-        var denomSum = 0;
+        //var denomSum = 0; // used for softmax
+        // set output array
         for (var i = 0; i < this.outputs; i++) {
             outs[i] = this.nodes[outStart + i].outputValue;
-            //denomSum += Math.exp(this.nodes[outStart + i].outputValue);
+            //denomSum += Math.exp(this.nodes[outStart + i].outputValue); // used for softmax
         }
 
 
@@ -205,23 +207,23 @@ class Brain {
         return outs;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     //sets up the NN as a list of this.nodes in order to be engaged
 
     generateNetwork() {
         this.connectNodes();
         this.network = [];
-        //for each layer add the node in that layer, since layers cannot connect to themselves there is no need to order the this.nodes within a layer
 
-        for (var l = 0; l < this.layers; l++) { //for each layer
-            for (var i = 0; i < this.nodes.length; i++) { //for each node
-                if (this.nodes[i].layer == l) { //if that node is in that layer
+        for (var l = 0; l < this.layers; l++) {
+            for (var i = 0; i < this.nodes.length; i++) {
+                if (this.nodes[i].layer == l) {
                     this.network.push(this.nodes[i]);
                 }
             }
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------------------------
     //mutate the NN by adding a new node
     //it does this by picking a random connection and disabling it then 2 new connections are added
     //1 between the input node of the disabled connection and the new node
@@ -234,7 +236,7 @@ class Brain {
         }
         var randomConnection = floor(random(this.genes.length));
 
-        while (this.genes[randomConnection].fromNode == this.nodes[this.biasNode] && this.genes.length != 1) { //dont disconnect bias
+        while (this.genes[randomConnection].fromNode == this.nodes[this.biasNode] && this.genes.length != 1) { // dont disconnect bias
             randomConnection = floor(random(this.genes.length));
         }
 

@@ -15,6 +15,11 @@ class Poof {
         this.halfSizeMod;
         this.hit = false;
         this.color = this.parent.color;
+
+        //  score penalty for parent.score - to discourage mashing
+        this.parent.score -= 20;
+
+
     }
 
 
@@ -53,7 +58,7 @@ class Poof {
                 if (!this.hit) {
                     this.boost();
                     this.hit = true;
-                    this.parent.score += 100;
+                    this.parent.score += 200;
                 }
             }
         }
@@ -64,11 +69,14 @@ class Poof {
         // find angle between spout and bubble
         var ang = Math.atan2((this.parent.y - this.parent.bubble.y), (this.parent.x - this.parent.bubble.x));
         // calculate thrust components
-        var xThrust = this.power * Math.cos(ang) * 2;
+        var xThrust = this.power * Math.cos(ang) * 2.25; // *2 works well visually
         var yThrust = this.power * Math.sin(ang);
 
         // add component thrusts to bubble
         this.parent.bubble.bump(xThrust, yThrust);
+
+        // play woosh
+        //woosh.play();
 
     }
 

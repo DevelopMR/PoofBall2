@@ -48,11 +48,14 @@ class Spout {
         this.vision = []; //the input array fed into the neuralNet
         this.decision = []; //the out put of the NN
         this.unadjustedFitness;
-        this.defaultLifeSpan = 300;
-        this.lifespan = this.defaultLifeSpan; //how long the player lived for this.fitness
+
+        this.lifespan = 0; //how long the player lived for this.fitness
         this.bestScore = 0; //stores the this.score achieved used for replay
         this.dead = false;
         this.score = 0;
+        this.topGoalScore = 0;
+        this.leftGoalScore = 0;
+        this.rightGoalScore = 0;
         this.gen = 0;
 
 
@@ -126,13 +129,33 @@ class Spout {
             this.poof = new Poof(this);
             this.livePoof = true;
             this.justPoofed = 0;
+
+            // sound
+            //poplaunch.play(); // too laggy
+
         }
     }
 
     thruGoal() {
 
-        this.score += 500;
+        this.score += 1000;
+        this.topGoalScore += 1000;
         //delete this.poof;
+        this.bubble = new Bubble(this);
+    }
+
+    thruSideGoal() {
+        const sideScoreAmt = 1500;
+
+        this.score += sideScoreAmt;
+
+        if (this.bubble.x < 0) {
+            this.rightGoalScore += sideScoreAmt;
+        }
+        else {
+            this.leftGoalScore += sideScoreAmt;
+        }
+
         this.bubble = new Bubble(this);
     }
 
@@ -145,7 +168,7 @@ class Spout {
     }
 
     update() {
-        //   this.lifespan--;
+        this.lifespan++;
         this.bubble.update();
 
         if (this.livePoof) {
@@ -163,9 +186,6 @@ class Spout {
     checkCollisions() {
 
         // check for life
-        if (this.lifespan <= 0) {
-            this.dead = true;
-        }
 
         // xy boundary checks
         if (this.x < this.size) {
@@ -180,7 +200,6 @@ class Spout {
     look() {
         this.vision = []; //clear
 
-        //this.vision[0] = map(this.rot, -this.TwoPI, this.TwoPI, -1, 1);
         // DO FOR ALL INPUTS
         this.vision[0] = map(this.x, 0, 1000, 0, 1); // player x-pos 
         this.vision[1] = map(this.bubble.x - this.x, -1000, 1000, -1, 1); // bubble x-delta
@@ -195,7 +214,6 @@ class Spout {
         //get the output of the neural network
         this.decision = this.brain.feedForward(this.vision);
 
-        //console.log(this.decision[0] + " | " + this.decision[1]);
 
         const velChangeFactor = .5;
         const thoughtSensitivity = .75;

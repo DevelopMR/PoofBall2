@@ -17,7 +17,7 @@ class Bubble {
         this.radius = this.width / 2;
 
         this.bumpCount = 0;
-        this.bumpMax = 8; // maximum number of puffs a bubble can withstand
+        this.bumpMax = 4; // maximum number of puffs a bubble can withstand
     }
 
 
@@ -72,10 +72,9 @@ class Bubble {
         // border 
         if ((this.x > canvas.width) || (this.x < 0)) {
 
-
             if ((this.y > 200) && (this.y < 400)) {
                 // side score!
-                this.parent.thruGoal();
+                this.parent.thruSideGoal();
             }
             else {
                 this.parent.dead = true
