@@ -5,7 +5,7 @@ class Brain {
         this.inputs = inputs;
         this.outputs = outputs;
         this.layers = 3;
-        this.midlayerNodes = 5;
+        this.midlayerNodes = 6;
         //this.midTwoLayerNodes = 9;
         this.nextNode = 0;
         this.network = []; //a list of the this.nodes in the order that they need to be considered in the NN
@@ -520,10 +520,10 @@ class Brain {
     //----------------------------------------------------------------------------------------------------------------------------------------
     //draw the genome on the screen
     drawGenome(startX, startY, w, h) {
-        //i know its ugly but it works (and is not that important) so I'm not going to mess with it
-        var allNodes = []; //new ArrayList<ArrayList<Node>>();
-        var nodePoses = []; // new ArrayList<PVector>();
-        var nodeNumbers = []; // new ArrayList<Integer>();
+
+        var allNodes = [];
+        var nodePoses = [];
+        var nodeNumbers = [];
 
         //get the positions on the screen that each node is supposed to be in
 
@@ -587,14 +587,29 @@ class Brain {
         }
 
         // print out neural network info text
-        // textAlign(RIGHT);
-        // fill(255);
-        // textSize(15);
-        // noStroke();
-        // text("car angle", nodePoses[0].x - 20, nodePoses[0].y);
-        // text("touching ground", nodePoses[1].x - 20, nodePoses[1].y);
-        // text("angular velocity", nodePoses[2].x - 20, nodePoses[2].y);
-        // text("Distance to ground", nodePoses[3].x - 20, nodePoses[3].y);
+        textAlign(RIGHT);
+        fill(255);
+        textSize(8);
+        noStroke();
+        // inputs
+        text("XPOS", nodePoses[0].x - 15, nodePoses[0].y - 4); // hard hack to inputs
+        text(this.nodes[0].outputValue.toFixed(2), nodePoses[0].x - 15, nodePoses[0].y + 8);// this.nodes[i].outputValue
+        text("BUBXΔ", nodePoses[1].x - 15, nodePoses[1].y - 4);
+        text(this.nodes[1].outputValue.toFixed(2), nodePoses[1].x - 15, nodePoses[1].y + 8);
+        text("BUBY", nodePoses[2].x - 15, nodePoses[2].y - 4);
+        text(this.nodes[2].outputValue.toFixed(2), nodePoses[2].x - 15, nodePoses[2].y + 8);
+        text("BIAS", nodePoses[3].x - 15, nodePoses[3].y - 4);
+        text("1", nodePoses[3].x - 15, nodePoses[3].y + 8);
+
+        // outputs
+        textAlign(LEFT);
+        var endNodeIndex = this.nodes.length - 1; // bias node is added after, but is in inputs layer
+        text("LEFT", nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y - 4);
+        text(this.nodes[endNodeIndex - 3].outputValue.toFixed(2), nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y + 8);
+        text("RIGHT", nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y - 4);
+        text(this.nodes[endNodeIndex - 2].outputValue.toFixed(2), nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y + 8);
+        text("POOF", nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y - 4);
+        text(this.nodes[endNodeIndex - 1].outputValue.toFixed(2), nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y + 8);
         // text("gradient", nodePoses[4].x - 20, nodePoses[4].y);
         // text("bias", nodePoses[5].x - 20, nodePoses[5].y);
         // textAlign(LEFT);

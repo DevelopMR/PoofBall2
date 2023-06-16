@@ -14,10 +14,13 @@ class Poof {
         this.sizeMod;
         this.halfSizeMod;
         this.hit = false;
+
         this.color = this.parent.color;
+        this.strokeColor = color(hue(this.color), int(saturation(this.color) * .25), int(brightness(this.color)), 15);
+        this.fillColor = color(hue(this.color), int(saturation(this.color) * .25), int(brightness(this.color)), 7);
 
         //  score penalty for parent.score - to discourage mashing
-        this.parent.score -= 20;
+        this.parent.score -= 30; // 20 can be stable...test 30 ok
 
 
     }
@@ -26,8 +29,8 @@ class Poof {
     show() {
         colorMode(HSB, 100);
 
-        stroke(color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 35));
-        fill(color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 5));
+        stroke(this.strokeColor);
+        fill(this.fillColor);
 
         var scaleMod = 1 + this.ModScaler * (canvas.height - this.y);
         this.sizeMod = this.size * scaleMod;
@@ -69,7 +72,7 @@ class Poof {
         // find angle between spout and bubble
         var ang = Math.atan2((this.parent.y - this.parent.bubble.y), (this.parent.x - this.parent.bubble.x));
         // calculate thrust components
-        var xThrust = this.power * Math.cos(ang) * 2.25; // *2 works well visually
+        var xThrust = this.power * Math.cos(ang) * 4; // *2 works well visually
         var yThrust = this.power * Math.sin(ang);
 
         // add component thrusts to bubble

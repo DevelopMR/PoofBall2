@@ -27,7 +27,7 @@ class Bubble {
         colorMode(HSB, 100);
         var strokeColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 55);
         stroke(strokeColor);
-        //fill(this.color);
+
         var fieldColor = color(hue(this.color), int(saturation(this.color) * .8), int(brightness(this.color)), 10);
         fill(fieldColor);
         ellipse(this.x, this.y, this.width, this.width);
@@ -41,7 +41,7 @@ class Bubble {
         this.yVel -= yBump;
 
         this.bumpCount++;
-        if (this.bumpCount >= this.bumpMax) {
+        if (this.bumpCount > this.bumpMax) {
             this.parent.dead = true;
         }
     }

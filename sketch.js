@@ -91,17 +91,19 @@ function drawToScreen() {
         //fill(230, 240, 255);
         //rect(0, 0, 1000, 800);
         noStroke();
-        fill(140, 180, 210, 255);
-        rect(400, 0, 200, 3); // top goal
-        fill(180, 220, 250, 255);
-        rect(997, 200, 3, 200); // side goal1
-        rect(0, 200, 3, 200); // side goal2
+        //fill(140, 180, 210, 255);
+        fill(205, 127, 50, 255);
+        rect(400, 0, 200, 4); // top goal
+        //fill(180, 220, 250, 255);
+        fill(205, 127, 50, 255);
+        rect(996, 200, 4, 200); // side goal1
+        rect(0, 200, 4, 200); // side goal2
     }
 }
 
 function drawBrain() { //show the brain of whatever genome is currently showing
     var startX = 0;
-    var startY = 100;
+    var startY = 130;
     var w = 190;
     var h = 240;
 
@@ -121,6 +123,7 @@ function writeInfo() {
     text("GENERATION " + population.gen, 20, 40);
     text("REMAINING " + population.remaining, 20, 70);
     text("TOP SCORE " + bestCurrentPlayer.score.toFixed(0), 20, 100);
+    text("LIFESPAN " + bestCurrentPlayer.lifespan, 20, 130);
 
 
 
