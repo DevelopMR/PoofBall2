@@ -1,0 +1,11 @@
+# Dependencies and editor settings
+node_modules/
+package-lock.json
+jsconfig.json
+.vscode/
+.vs/
+
+# OS files
+Thumbs.db
+desktop.ini
+.DS_Store

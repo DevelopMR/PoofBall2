@@ -217,7 +217,7 @@ class Spout {
 
         const velChangeFactor = .5;
         const thoughtSensitivity = .75;
-        const puffThoughtSensitivity = .90; // .85 base
+        const puffThoughtSensitivity = .85; // .85 base
 
         if (this.decision[0] > thoughtSensitivity) {
             this.left();

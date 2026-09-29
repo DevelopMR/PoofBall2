@@ -5,7 +5,7 @@ class Brain {
         this.inputs = inputs;
         this.outputs = outputs;
         this.layers = 3;
-        this.midlayerNodes = 6;
+        this.midlayerNodes = 16;
         //this.midTwoLayerNodes = 9;
         this.nextNode = 0;
         this.network = []; //a list of the this.nodes in the order that they need to be considered in the NN
@@ -602,20 +602,35 @@ class Brain {
         text("1", nodePoses[3].x - 15, nodePoses[3].y + 8);
 
         // outputs
+        // hack valed from spout
+        const thoughtSensitivity = .75;
+        const puffThoughtSensitivity = .85;
         textAlign(LEFT);
         var endNodeIndex = this.nodes.length - 1; // bias node is added after, but is in inputs layer
-        text("LEFT", nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y - 4);
-        text(this.nodes[endNodeIndex - 3].outputValue.toFixed(2), nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y + 8);
-        text("RIGHT", nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y - 4);
-        text(this.nodes[endNodeIndex - 2].outputValue.toFixed(2), nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y + 8);
-        text("POOF", nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y - 4);
-        text(this.nodes[endNodeIndex - 1].outputValue.toFixed(2), nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y + 8);
-        // text("gradient", nodePoses[4].x - 20, nodePoses[4].y);
-        // text("bias", nodePoses[5].x - 20, nodePoses[5].y);
-        // textAlign(LEFT);
-        // text("gas", nodePoses[nodePoses.length - 2].x + 20, nodePoses[nodePoses.length - 2].y);
-        // text("break", nodePoses[nodePoses.length - 1].x + 20, nodePoses[nodePoses.length - 1].y);
+        //fill(255);
+        var leftOut = this.nodes[endNodeIndex - 3].outputValue;
+        var rightOut = this.nodes[endNodeIndex - 2].outputValue;
+        var poofOut = this.nodes[endNodeIndex - 1].outputValue;
 
+        text("LEFT", nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y - 4);
+        if (leftOut > thoughtSensitivity) {
+            fill(255, 100, 100);
+        }
+        text(leftOut.toFixed(2), nodePoses[endNodeIndex - 2].x + 16, nodePoses[endNodeIndex - 2].y + 8);
+        fill(255);
+        text("RIGHT", nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y - 4);
+        if (rightOut > thoughtSensitivity) {
+            fill(255, 100, 100);
+        }
+        text(rightOut.toFixed(2), nodePoses[endNodeIndex - 1].x + 16, nodePoses[endNodeIndex - 1].y + 8);
+
+        fill(255);
+        text("POOF", nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y - 4);
+        if (poofOut > puffThoughtSensitivity) {
+            fill(255, 100, 100);
+        }
+        text(poofOut.toFixed(2), nodePoses[endNodeIndex].x + 16, nodePoses[endNodeIndex].y + 8);
+        fill(255);
 
 
     }

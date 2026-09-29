@@ -17,7 +17,7 @@ class Bubble {
         this.radius = this.width / 2;
 
         this.bumpCount = 0;
-        this.bumpMax = 4; // maximum number of puffs a bubble can withstand
+        this.bumpMax = 6; // maximum number of puffs a bubble can withstand
     }
 
 
